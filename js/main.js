@@ -82,6 +82,6 @@ function editbtn(event) {
         start.value = data.start || "";
         destination.value = data.destination || "";
         fares.value = data.fares || "";
-        start.price = data.price || "";
+        price.value = data.price || "";
     })
 }
