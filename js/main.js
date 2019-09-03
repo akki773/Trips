@@ -22,6 +22,9 @@ const btnread = document.getElementById("btn-read");
 const btnupdate = document.getElementById("btn-update");
 const btndelete = document.getElementById("btn-delete");
 
+//notfound
+const notfound = document.getElementById("notfound");
+
 // insert value using create button
 
 btncreate.onclick = (event) => {
@@ -37,6 +40,10 @@ btncreate.onclick = (event) => {
     getData(db.trips, (data) => {
         id.value = data.id + 1 || 1;
     });
+
+    table();
+    let insertmsg = document.querySelector(".insertmsg");
+    getMsg(flag, insertmsg);
 }
 
 //create event on btn-read
@@ -52,8 +59,18 @@ btnupdate.onclick = () => {
             fares: fares.value,
             price: price.value
         }).then((updated) => {
-            let get = updated ? `data Updated` : `Couldn't update data`
+            // let get = updated ? `data updated` : `couldn't update data`;
+            let get = updated ? true : false;
+
+            // display message
+            let updatemsg = document.querySelector(".updatemsg");
+            getMsg(get, updatemsg);
+
+            start.value = destination.value = fares.value = price.value = "";
+            //console.log(get);
         })
+    } else {
+        console.log(`Please Select id: ${id}`);
     }
 }
 
@@ -65,6 +82,10 @@ btndelete.onclick = () => {
     });
     db.open();
     table();
+    textID(userid);
+
+    let deletemsg = document.querySelector(".deletemsg");
+    getMsg(true, deletemsg);
 }
 
 //window onload event
@@ -108,6 +129,8 @@ function table() {
                     })
                 })
             })
+        } else {
+            notfound.textContent = "No record found in the database..";
         }
     })
 }
@@ -127,4 +150,18 @@ function deletebtn(event) {
     let id = parseInt(event.target.dataset.id);
     db.trips.delete(id);
     table();
+}
+// function msg
+function getMsg(flag, element) {
+    if (flag) {
+        // call msg 
+        element.className += " movedown";
+
+        setTimeout(() => {
+            element.classList.forEach(classname => {
+                classname == "movedown" ? undefined : element.classList.remove("movedown");
+
+            })
+        }, 4000);
+    }
 }
