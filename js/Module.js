@@ -25,6 +25,38 @@ const bulkcreate = (dbtable, data) => {
     return flag;
 }
 
+//get data from database
+
+const getData = (dbtable, fn) => {
+    let index = 0;
+    let obj = {};
+
+    dbtable.count((count) => {
+        if (count) {
+            dbtable.each(table => {
+                obj = Sortobj(table);
+                fn(obj, index++);
+            })
+        } else {
+            fn(0);
+        }
+    })
+}
+
+//Sort object
+
+const Sortobj = sortobj => {
+    let obj = {};
+    obj = {
+        id: sortobj.id,
+        start: sortobj.start,
+        destination: sortobj.destination,
+        fares: sortobj.fares,
+        price: sortobj.price,
+    }
+    return obj;
+}
+
 //check textbox validation
 const empty = object => {
     let flag = false;
@@ -39,7 +71,16 @@ const empty = object => {
     return flag;
 }
 
+//cretate dynamic elements
+const createEle = (tagname, appendTo, fn) => {
+    const element = document.createElement(tagname);
+    if (appendTo) appendTo.appendChild(element);
+    if (fn) fn(element);
+}
+
 export default tripsdb;
 export {
-    bulkcreate
+    bulkcreate,
+    getData,
+    createEle
 }
