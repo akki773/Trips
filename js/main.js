@@ -42,6 +42,41 @@ btncreate.onclick = (event) => {
 //create event on btn-read
 btnread.onclick = table;
 
+//update event
+btnupdate.onclick = () => {
+    const id = parseInt(userid.value || 0);
+    if (id) {
+        db.trips.update(id, {
+            start: start.value,
+            destination: destination.value,
+            fares: fares.value,
+            price: price.value
+        }).then((updated) => {
+            let get = updated ? `data Updated` : `Couldn't update data`
+        })
+    }
+}
+
+//delete all records
+btndelete.onclick = () => {
+    db.delete();
+    db = tripsdb("Tripsdb", {
+        trips: '++id, start, destination, fares, price'
+    });
+    db.open();
+    table();
+}
+
+//window onload event
+window.onload = () => {
+    textID(userid);
+}
+
+function textID(textboxid) {
+    getData(db.trips, data => {
+        textboxid.value = data.id + 1 || 1;
+    })
+}
 
 function table() {
     const tbody = document.getElementById("tbody");
@@ -68,6 +103,8 @@ function table() {
                 createEle("td", tr, td => {
                     createEle("i", td, i => {
                         i.className += "fas fa-trash-alt btn-delete";
+                        i.setAttribute('data-id', data.id);
+                        i.onclick = deletebtn;
                     })
                 })
             })
@@ -84,4 +121,10 @@ function editbtn(event) {
         fares.value = data.fares || "";
         price.value = data.price || "";
     })
+}
+
+function deletebtn(event) {
+    let id = parseInt(event.target.dataset.id);
+    db.trips.delete(id);
+    table();
 }
