@@ -3,12 +3,6 @@ const tripsdb = (dbname, table) => {
     const db = new Dexie(dbname)
     db.version(1).stores(table);
     db.open();
-    /*
-    const db = new Dexie('myDb');
-    db.version(1).stores({
-        friends: 'name, age'
-    })
-    */
     return db;
 }
 
@@ -51,7 +45,6 @@ const Sortobj = sortobj => {
         id: sortobj.id,
         start: sortobj.start,
         destination: sortobj.destination,
-        fares: sortobj.fares,
         price: sortobj.price,
     }
     return obj;

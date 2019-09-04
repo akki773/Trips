@@ -5,14 +5,13 @@ import tripsdb, {
 } from './Module.js'
 
 let db = tripsdb("Tripsdb", {
-    trips: '++id, start, destination, fares, price'
+    trips: '++id, start, destination, price'
 });
 
 //input tags
 const userid = document.getElementById("id");
 const start = document.getElementById("start");
 const destination = document.getElementById("destination");
-const fares = document.getElementById("fares");
 const price = document.getElementById("price");
 
 //buttons
@@ -24,20 +23,18 @@ const btndelete = document.getElementById("btn-delete");
 
 //notfound
 const notfound = document.getElementById("notfound");
-
 // insert value using create button
 
 btncreate.onclick = (event) => {
-    if (parseFloat(fares.value || 0) && parseFloat(price.value || 0)) {
+    if (price.value.match('^[0-9]+$')) {
         let flag = bulkcreate(db.trips, {
             start: start.value,
             destination: destination.value,
-            fares: fares.value,
             price: (price.value)
         })
         //console.log(flag);
 
-        start.value = destination.value = fares.value = price.value = "";
+        start.value = destination.value = price.value = "";
         getData(db.trips, (data) => {
             id.value = data.id + 1 || 1;
         });
@@ -48,7 +45,7 @@ btncreate.onclick = (event) => {
     } else {
         let invalidmsg = document.querySelector(".invalidmsg");
         getMsg(true, invalidmsg);
-        fares.value = price.value = "";
+        price.value = "";
     }
 }
 
@@ -57,33 +54,35 @@ btnread.onclick = table;
 
 //update event
 btnupdate.onclick = () => {
+
     const id = parseInt(userid.value || 0);
     if (id) {
-        db.trips.update(id, {
-            start: start.value,
-            destination: destination.value,
-            fares: fares.value,
-            price: price.value
-        }).then((updated) => {
-            // let get = updated ? `data updated` : `couldn't update data`;
-            let get = updated ? true : false;
+        if (price.value.match('^[0-9]+$')) {
+            db.trips.update(id, {
+                start: start.value,
+                destination: destination.value,
+                price: price.value
+            }).then((updated) => {
+                let get = updated ? true : false;
 
-            // display message
-            let updatemsg = document.querySelector(".updatemsg");
-            getMsg(get, updatemsg);
+                // display message
+                let updatemsg = document.querySelector(".updatemsg");
+                getMsg(get, updatemsg);
 
-            start.value = destination.value = fares.value = price.value = "";
-            //console.log(get);
-        })
-    } else {
-        console.log(`Please Select id: ${id}`);
+                start.value = destination.value = price.value = "";
+            })
+        } else {
+
+            let invalidmsg = document.querySelector(".invalidmsg");
+            getMsg(true, invalidmsg);
+            price.value = "";
+        }
     }
 }
 
 //delete all records
 btndelete.onclick = () => {
     recordDeletion();
-    textboxid.value(userid);
 
 }
 
@@ -146,7 +145,7 @@ function recordDeletion() {
         if (data) {
             db.delete();
             db = tripsdb("Tripsdb", {
-                trips: '++id, start, destination, fares, price'
+                trips: '++id, start, destination, price'
             });
             db.open();
 
@@ -167,7 +166,6 @@ function editbtn(event) {
         userid.value = data.id || 0;
         start.value = data.start || "";
         destination.value = data.destination || "";
-        fares.value = data.fares || "";
         price.value = data.price || "";
     })
 }
