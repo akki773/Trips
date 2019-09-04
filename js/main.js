@@ -77,7 +77,7 @@ btnupdate.onclick = () => {
             getMsg(true, invalidmsg);
             price.value = "";
         }
-    }
+    } else {}
 }
 
 //delete all records
