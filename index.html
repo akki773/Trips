@@ -19,6 +19,9 @@
     <div class="w-100 btn btn-success insertmsg">Data Inserted Successfully...</div>
     <div class="w-100 btn btn-warning updatemsg">Data Updated ...! Refresh Database to See Results</div>
     <div class="w-100 btn btn-danger deletemsg">Data deleted</div>
+    <div class="w-100 btn btn-danger norecordmsg">No records found in the database...</div>
+    <div class="w-100 btn btn-danger invalidmsg">Invalid Fares or Price...</div>
+
 
     <main>
 
@@ -49,7 +52,7 @@
             <button class="btn btn-success" id="btn-create">Create</button>
             <button class="btn btn-primary" id="btn-read">Read</button>
             <button class="btn btn-warning" id="btn-update">Update</button>
-            <button class="btn btn-danger" id="btn-delete">Delete</button>
+            <button class="btn btn-danger" id="btn-delete">Delete All</button>
         </div>
 
         <div class="container d-flex">
@@ -66,35 +69,7 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
-                    <!--
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>200</td>
-                    <td><i class="fas fa-edit btn-edit"></i></td>
-                    <td><i class="fas fa-trash btn-delete"></i></td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>200</td>
-                    <td><i class="fas fa-edit btn-edit"></i></td>
-                    <td><i class="fas fa-trash btn-delete"></i></td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td>200</td>
-                    <td><i class="fas fa-edit btn-edit"></i></td>
-                    <td><i class="fas fa-trash btn-delete"></i></td>
-                </tr>
-                -->
+
                 </tbody>
             </table>
 
@@ -126,6 +101,8 @@
     <!--Custom JavaScript main.js-->
 
     <script src="./js/main.js" type="module"></script>
+
+
 </body>
 
 </html>

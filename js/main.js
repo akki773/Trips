@@ -28,22 +28,28 @@ const notfound = document.getElementById("notfound");
 // insert value using create button
 
 btncreate.onclick = (event) => {
-    let flag = bulkcreate(db.trips, {
-        start: start.value,
-        destination: destination.value,
-        fares: fares.value,
-        price: price.value
-    })
-    //console.log(flag);
+    if (parseFloat(fares.value || 0) && parseFloat(price.value || 0)) {
+        let flag = bulkcreate(db.trips, {
+            start: start.value,
+            destination: destination.value,
+            fares: fares.value,
+            price: (price.value)
+        })
+        //console.log(flag);
 
-    start.value = destination.value = fares.value = price.value = "";
-    getData(db.trips, (data) => {
-        id.value = data.id + 1 || 1;
-    });
+        start.value = destination.value = fares.value = price.value = "";
+        getData(db.trips, (data) => {
+            id.value = data.id + 1 || 1;
+        });
 
-    table();
-    let insertmsg = document.querySelector(".insertmsg");
-    getMsg(flag, insertmsg);
+        table();
+        let insertmsg = document.querySelector(".insertmsg");
+        getMsg(flag, insertmsg);
+    } else {
+        let invalidmsg = document.querySelector(".invalidmsg");
+        getMsg(true, invalidmsg);
+        fares.value = price.value = "";
+    }
 }
 
 //create event on btn-read
@@ -76,16 +82,9 @@ btnupdate.onclick = () => {
 
 //delete all records
 btndelete.onclick = () => {
-    db.delete();
-    db = tripsdb("Tripsdb", {
-        trips: '++id, start, destination, fares, price'
-    });
-    db.open();
-    table();
-    textID(userid);
+    recordDeletion();
+    textboxid.value(userid);
 
-    let deletemsg = document.querySelector(".deletemsg");
-    getMsg(true, deletemsg);
 }
 
 //window onload event
@@ -130,9 +129,36 @@ function table() {
                 })
             })
         } else {
-            notfound.textContent = "No record found in the database..";
+            let norecordmsg = document.querySelector(".norecordmsg");
+            getMsg(true, norecordmsg);
         }
     })
+}
+
+function recordDeletion() {
+    const tbody = document.getElementById("tbody");
+
+    while (tbody.hasChildNodes()) {
+        tbody.removeChild(tbody.firstChild);
+    }
+
+    getData(db.trips, (data) => {
+        if (data) {
+            db.delete();
+            db = tripsdb("Tripsdb", {
+                trips: '++id, start, destination, fares, price'
+            });
+            db.open();
+
+            let deletemsg = document.querySelector(".deletemsg");
+            getMsg(true, deletemsg);
+        } else {
+            let norecordmsg = document.querySelector(".norecordmsg");
+            getMsg(true, norecordmsg);
+        }
+
+    })
+    textID(userid);
 }
 
 function editbtn(event) {
@@ -150,6 +176,7 @@ function deletebtn(event) {
     let id = parseInt(event.target.dataset.id);
     db.trips.delete(id);
     table();
+
 }
 // function msg
 function getMsg(flag, element) {

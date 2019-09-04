@@ -24,7 +24,9 @@ table .btn-delete {
 /* messages */
 .updatemsg,
 .deletemsg,
-.insertmsg {
+.insertmsg,
+.norecordmsg,
+.invalidmsg {
     position: absolute;
     top: -40px;
 }
